@@ -17,6 +17,22 @@ flag:
         - "&b{info}"
 checks:
   movement:
+    speed:
+      a:
+        bypass: true
+        enabled: true
+        buffer:
+          deaccumulator: 2.0
+          accumulator: 1.0
+          max: 4.0
+    nofall:
+      a:
+        bypass: false
+        enabled: true
+        buffer:
+          deaccumulator: 1.0
+          accumulator: 1.0
+          max: 2.0
     jump:
       #
       # Experimental - Unstable!
@@ -27,5 +43,5 @@ checks:
         cancel-type: "PULLDOWN"
         buffer:
           deaccumulator: 1.0
-          accumulator: 2.0
-          max: 4.0
+          accumulator: 1.0
+          max: 1.0

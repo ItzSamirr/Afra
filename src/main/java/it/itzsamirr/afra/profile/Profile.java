@@ -5,31 +5,56 @@ import it.itzsamirr.afra.api.profile.flag.IFlagController;
 import it.itzsamirr.afra.api.utils.Color;
 import it.itzsamirr.afra.api.utils.Reflection;
 import it.itzsamirr.afra.profile.flag.JumpFlagController;
+import it.itzsamirr.afra.utils.Distance;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public final class Profile implements IProfile {
     private Player player;
+    private Vector appliedVelocity = new Vector();
+    private Distance lastDistance = null;
     private final double PLAYER_WIDTH = .6;
     private final double PLAYER_HEIGHT = 1.8;
     private final double PLAYER_HEIGHT_SNEAKING = 1.6;
     private boolean lastOnGround = false;
     private long groundTicks = 0, lastGroundTicks = 0, jumpTicks = 0, lastJumpTicks = 0;
+    private Location lastGroundLocation;
     private List<IFlagController> flagControllers = new ArrayList<>();
 
     public Profile(Player player) {
         this.player = player;
+        lastGroundLocation = null;
+        lastDistance = new Distance(player.getLocation(), player.getLocation());
         flagControllers.add(new JumpFlagController(this));
+    }
+
+    @Override
+    public Distance getLastDistance() {
+        return lastDistance;
+    }
+
+    @Override
+    public void setLastDistance(Distance d) {
+        this.lastDistance = d;
+    }
+
+    @Override
+    public Vector getAppliedVelocity() {
+        return appliedVelocity;
+    }
+
+    @Override
+    public void setAppliedVelocity(Vector vec) {
+        this.appliedVelocity = vec;
     }
 
     @Override
@@ -49,6 +74,16 @@ public final class Profile implements IProfile {
     @Override
     public int getYJumpModifier() {
         return player.hasPotionEffect(PotionEffectType.JUMP) ? getEffect(PotionEffectType.JUMP).getAmplifier() : 0;
+    }
+
+    @Override
+    public Location getLastGroundLocation() {
+        return lastGroundLocation;
+    }
+
+    @Override
+    public void setLastGroundLocation(Location loc) {
+        this.lastGroundLocation = loc;
     }
 
     @Override

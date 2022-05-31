@@ -4,18 +4,63 @@ import org.bukkit.Location;
 
 public final class Distance {
     private double xFrom, yFrom, zFrom, xTo, yTo, zTo;
+    private float yawFrom, yawTo, pitchFrom, pitchTo;
 
-    public Distance(double xFrom, double yFrom, double zFrom, double xTo, double yTo, double zTo) {
+    public Distance(double xFrom, double yFrom, double zFrom, double xTo, double yTo, double zTo, float yawFrom, float yawTo, float pitchFrom, float pitchTo) {
         this.xFrom = xFrom;
         this.yFrom = yFrom;
         this.zFrom = zFrom;
         this.xTo = xTo;
         this.yTo = yTo;
         this.zTo = zTo;
+        this.yawFrom = yawFrom;
+        this.yawTo = yawTo;
+        this.pitchFrom = pitchFrom;
+        this.pitchTo = pitchTo;
     }
 
     public Distance(Location from, Location to){
-        this(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ());
+        this(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ(), from.getYaw(), to.getYaw(), from.getPitch(), to.getPitch());
+    }
+
+    public float getDYaw(){
+        return yawTo - yawFrom;
+    }
+
+    public float getDPitch(){
+        return pitchTo - pitchFrom;
+    }
+
+    public float getYawFrom() {
+        return yawFrom;
+    }
+
+    public void setYawFrom(float yawFrom) {
+        this.yawFrom = yawFrom;
+    }
+
+    public float getYawTo() {
+        return yawTo;
+    }
+
+    public void setYawTo(float yawTo) {
+        this.yawTo = yawTo;
+    }
+
+    public float getPitchFrom() {
+        return pitchFrom;
+    }
+
+    public void setPitchFrom(float pitchFrom) {
+        this.pitchFrom = pitchFrom;
+    }
+
+    public float getPitchTo() {
+        return pitchTo;
+    }
+
+    public void setPitchTo(float pitchTo) {
+        this.pitchTo = pitchTo;
     }
 
     public double getDX(){

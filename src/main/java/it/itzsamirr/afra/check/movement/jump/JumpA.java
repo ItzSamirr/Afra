@@ -16,8 +16,7 @@ import org.bukkit.Location;
 
 import java.util.HashMap;
 
-@Experimental(dev = true)
-@Testing
+@Experimental
 public class JumpA extends Check {
     public JumpA(Afra plugin) {
         super(plugin, CheckCategory.MOVEMENT, "Jump", 'A', "Checks if a player jumps longer than usual");
@@ -25,12 +24,12 @@ public class JumpA extends Check {
 
     @Override
     public void on(Event event) {
+        if(!isEnabled()) {
+            return;
+        }
         if(event instanceof MoveEvent){
             MoveEvent e = (MoveEvent) event;
-            if(!isEnabled()) {
-                if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
-                return;
-            }
+
             if(canBypass(e.getProfile())){
                 if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
                 return;
@@ -54,6 +53,10 @@ public class JumpA extends Check {
             long lastJumpTicks = profile.getLastJumpTicks();
             if(lastJumpTicks != 0){
                 if(jumpTicks != 0){
+                    if(profile.getAppliedVelocity().lengthSquared() != 0)
+                    {
+                        return;
+                    }
                     if(jumpTicks > Values.MAX_JUMP_TICKS_IN_AIR+profile.getYJumpModifier()){
                         preVL.accumulate(profile);
                         if(preVL.isMax(profile)) {

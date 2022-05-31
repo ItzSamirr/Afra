@@ -3,17 +3,29 @@ package it.itzsamirr.afra.listeners;
 import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.api.event.profile.MoveEvent;
+import it.itzsamirr.afra.utils.Distance;
+import jdk.nashorn.internal.ir.Block;
+import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.util.Vector;
 
 public class MoveListener implements Listener {
     private final Afra plugin;
 
     public MoveListener(Afra plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onVelocity(PlayerVelocityEvent e)
+    {
+        IProfile profile = plugin.getProfileManager().getProfile(e.getPlayer());
+        Vector vector = e.getVelocity();
+        profile.setAppliedVelocity(vector.clone());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -33,8 +45,16 @@ public class MoveListener implements Listener {
         }
         if(profile.isOnGround())
         {
+            profile.setAppliedVelocity(new Vector());
             profile.setGroundTicks(profile.getGroundTicks()+1);
         }else{
+            if(profile.isLastOnGround())
+            {
+                Location lastOnGroundLocation = profile.getPlayer().getWorld().getHighestBlockAt(e.getFrom().clone()).getLocation().add(.5, .5 , .5);
+                lastOnGroundLocation.setYaw(e.getFrom().getYaw());
+                lastOnGroundLocation.setPitch(e.getFrom().getPitch());
+                profile.setLastGroundLocation(lastOnGroundLocation);
+            }
             profile.setGroundTicks(0);
         }
         MoveEvent moveEvent = new MoveEvent(profile, e.getFrom(), e.getTo());
@@ -49,10 +69,15 @@ public class MoveListener implements Listener {
                 }
                 break;
             case 2:
-                e.setTo(e.getPlayer().getWorld().getHighestBlockAt(e.getFrom()).getLocation());
+                if(profile.getLastGroundLocation() == null) {
+                    e.setTo(e.getPlayer().getWorld().getHighestBlockAt(e.getFrom()).getLocation());
+                }else{
+                    e.setTo(profile.getLastGroundLocation());
+                }
                 profile.setJumpTicks(0);
                 break;
         }
+        profile.setLastDistance(new Distance(e.getFrom(), e.getTo()));
         profile.setLastOnGround(profile.isOnGround());
         profile.setLastGroundTicks(profile.getGroundTicks());
         profile.setLastJumpTicks(profile.getJumpTicks());
