@@ -1,0 +1,5 @@
+name: Afra
+version: '${project.version}'
+main: it.itzsamirr.afra.Afra
+api-version: 1.8
+authors: [ ItzSamirr ]

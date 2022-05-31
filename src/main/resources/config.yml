@@ -1,0 +1,29 @@
+prefix: "&9[&1&lAfra&9] &r"
+flag:
+  msg:
+    enabled: true
+    text: "{prefix}&1{player} &9failed &1{check} &9(&1{type}&9)"
+    hover:
+      enabled: true
+      text:
+        - "&1{player} &9| &1Ping: &9{ping}"
+        - ""
+        - " &1Description:"
+        - "&9{desc}"
+        - ""
+        - " &1Info:"
+        - "&9{info}"
+checks:
+  movement:
+    jump:
+      #
+      # Experimental - Unstable!
+      #
+      a:
+        enabled: true
+        info: "&1Ticks: &9{ticks}, &1Max: &9{max}"
+        cancel-type: "PULLDOWN"
+        buffer:
+          deaccumulator: 1.0
+          accumulator: 2.0
+          max: 6.0
