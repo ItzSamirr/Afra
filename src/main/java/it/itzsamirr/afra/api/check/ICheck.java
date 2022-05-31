@@ -7,6 +7,8 @@ import it.itzsamirr.afra.api.event.Cancellable;
 import it.itzsamirr.afra.api.event.listener.Listener;
 import it.itzsamirr.afra.api.profile.IProfile;
 
+import java.util.HashMap;
+
 public interface ICheck extends Listener {
     void reload();
     void init();
@@ -16,6 +18,7 @@ public interface ICheck extends Listener {
     boolean isEnabled();
     boolean isExperimental();
     boolean isDev();
-    void flag(String msg, IProfile profile, Cancellable cancellable, int type);
+    void flag(HashMap<String, Object> infoMap, IProfile profile, Cancellable cancellable, int type);
+    String generateFormattedInfo(HashMap<String, Object> infoMap);
 
 }

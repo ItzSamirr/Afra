@@ -17,7 +17,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import java.util.List;
+import java.util.*;
 
 public abstract class Check implements ICheck {
     protected ICheckSettings settings;
@@ -90,7 +90,7 @@ public abstract class Check implements ICheck {
     }
 
     @Override
-    public void flag(String msg, IProfile profile, Cancellable cancellable, int type) {
+    public void flag(HashMap<String, Object> infoMap, IProfile profile, Cancellable cancellable, int type) {
 
         if(plugin.getConfig().getBoolean("flag.msg.enabled")) {
             BaseComponent component = new TextComponent(Color.translate(plugin.getConfig().getString("flag.msg.text")).replace("{prefix}", Color.translate(plugin.getConfig().getString("prefix"))).replace("{player}", profile.getPlayer().getName()).replace("{check}", getInfo().getName()).replace("{type}", String.valueOf(getInfo().getType())));
@@ -100,12 +100,28 @@ public abstract class Check implements ICheck {
                 if(!hoverList.isEmpty())
                 {
                     for (int i = 0; i < hoverList.size(); i++) {
-                        hoverComponents[i] = new TextComponent(Color.translate(hoverList.get(i).replace("{desc}", getInfo().getDescription()).replace("{info}", msg).replace("{player}", profile.getPlayer().getName()).replace("{ping}", String.valueOf(profile.getPing()))));
+                        hoverComponents[i] = new TextComponent(Color.translate(hoverList.get(i).replace("{desc}", getInfo().getDescription()).replace("{info}", generateFormattedInfo(infoMap)).replace("{player}", profile.getPlayer().getName()).replace("{ping}", String.valueOf(profile.getPing()))) + "\n");
                     }
                 }
                 component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponents));
             }
         }
         cancellable.cancel(type);
+    }
+
+    @Override
+    public String generateFormattedInfo(HashMap<String, Object> infoMap) {
+        StringBuilder buffer = new StringBuilder();
+        List<Map.Entry<String, Object>> entries = new ArrayList<>(infoMap.entrySet());
+        for (int i = 0; i < entries.size(); i++) {
+            Map.Entry<String, Object> entry = entries.get(i);
+            if(i >= entries.size()-1) buffer.append(Color.translate(plugin.getConfig().getString("flag.msg.hover.info-format")
+                    .replace("{key}", entry.getKey())
+                    .replace("{value}", String.valueOf(entry.getValue()))));
+            else buffer.append(Color.translate(plugin.getConfig().getString("flag.msg.hover.info-format")
+                    .replace("{key}", entry.getKey())
+                    .replace("{value}", String.valueOf(entry.getValue())))).append(", ");
+        }
+        return buffer.toString();
     }
 }

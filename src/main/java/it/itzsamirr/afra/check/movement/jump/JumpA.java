@@ -1,5 +1,6 @@
 package it.itzsamirr.afra.check.movement.jump;
 
+import com.google.common.collect.Maps;
 import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.check.CheckCategory;
 import it.itzsamirr.afra.api.check.annotations.Experimental;
@@ -11,6 +12,8 @@ import it.itzsamirr.afra.profile.flag.JumpFlagController;
 import it.itzsamirr.afra.utils.Distance;
 import it.itzsamirr.afra.utils.Values;
 import org.bukkit.Location;
+
+import java.util.HashMap;
 
 @Experimental(dev = true)
 public class JumpA extends Check {
@@ -45,7 +48,10 @@ public class JumpA extends Check {
                     if(jumpTicks > Values.MAX_JUMP_TICKS_IN_AIR+profile.getYJumpModifier()){
                         preVL.accumulate(profile);
                         if(preVL.isMax(profile)) {
-                            flag(((String) getSettings().getSetting("info")), profile, e, MoveEvent.CancelType.get((String) getSettings().getSetting("cancel-type")));
+                            HashMap<String, Object> infoMap = new HashMap<>();
+                            infoMap.put("ticks", jumpTicks);
+                            infoMap.put("max", Values.MAX_JUMP_TICKS_IN_AIR+profile.getYJumpModifier());
+                            flag(infoMap, profile, e, MoveEvent.CancelType.get((String) getSettings().getSetting("cancel-type")));
                         }
                     }
                 }else if(preVL.get(profile) != .0){

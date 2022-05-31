@@ -5,6 +5,7 @@ flag:
     text: "{prefix}&3{player} &bfailed &3{check} &b(&3{type}&b)"
     hover:
       enabled: true
+      info-format: "&3{key}: &b{value}"
       text:
         - "&3{player} &b| &3Ping: &b{ping}"
         - ""
@@ -21,7 +22,6 @@ checks:
       #
       a:
         enabled: true
-        info: "&3Ticks: &b{ticks}, &3Max: &b{max}"
         cancel-type: "PULLDOWN"
         buffer:
           deaccumulator: 1.0
