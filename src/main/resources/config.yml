@@ -1,4 +1,5 @@
 prefix: "&b[&3&lAfra&b] &r"
+bypass: true
 flag:
   msg:
     enabled: true
@@ -21,6 +22,7 @@ checks:
       # Experimental - Unstable!
       #
       a:
+        bypass: true
         enabled: true
         cancel-type: "PULLDOWN"
         buffer:

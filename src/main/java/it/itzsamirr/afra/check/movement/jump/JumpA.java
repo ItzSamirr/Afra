@@ -25,9 +25,16 @@ public class JumpA extends Check {
 
     @Override
     public void on(Event event) {
-        if(!isEnabled())return;
         if(event instanceof MoveEvent){
             MoveEvent e = (MoveEvent) event;
+            if(!isEnabled()) {
+                if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
+                return;
+            }
+            if(canBypass(e.getProfile())){
+                if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
+                return;
+            }
             Location from = e.getFrom();
             Location to = e.getTo();
             Distance d = new Distance(from, to);
