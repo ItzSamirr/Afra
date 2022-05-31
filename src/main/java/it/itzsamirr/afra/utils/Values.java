@@ -11,10 +11,12 @@ public final class Values {
     }
     public static final int MAX_JUMP_TICKS_IN_AIR;
     public static final ArrayList<String> steppableMaterials;
+    public static final float FRICTION;
 
     static{
         MAX_JUMP_TICKS_IN_AIR = 6;
-        steppableMaterials = new ArrayList<>(Arrays.asList("STAIRS", "STEP", "LADDER"));
+        FRICTION = 0.91f;
+        steppableMaterials = new ArrayList<>(Arrays.asList("STAIRS", "STEP"));
     }
 
     public static boolean isSteppable(Material mat){

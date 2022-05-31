@@ -9,15 +9,17 @@ import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.check.Check;
 import it.itzsamirr.afra.api.event.profile.MoveEvent;
 import it.itzsamirr.afra.utils.Distance;
+import it.itzsamirr.afra.utils.Values;
 import org.bukkit.Location;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Experimental(dev = true)
 public class SpeedA extends Check {
     public SpeedA(Afra plugin) {
-        super(plugin, CheckCategory.MOVEMENT, "Speed", 'A', "Checks if the player is going too fast");
+        super(plugin, CheckCategory.MOVEMENT, "Speed", 'A', "Checks if the player is not following the friction rules in air");
     }
 
     @Override
@@ -36,13 +38,26 @@ public class SpeedA extends Check {
         Location to = e.getTo();
         Distance d = new Distance(from, to);
         IProfile profile = e.getProfile();
-        final double dxz = d.getDXZ();
-        final float dYaw = d.getDYaw();
-        final double lastDxz = profile.getLastDistance().getDXZ();
-        final double acc = Math.abs(dxz - lastDxz);
+        if(!profile.isOnGround() && !profile.isLastOnGround()) {
+            final double lastdxz = profile.getLastDistance().getDXZ();
+            final double dxz = d.getDXZ();
+            final double appliedLastDxz = lastdxz * Values.FRICTION;
+            final double equalness = (dxz - appliedLastDxz) * 137;
+            if(equalness >= 1.0)
+            {
+                preVL.accumulate(profile);
+                if(preVL.isMax(profile)) {
+                    HashMap<String, Object> infoMap = new HashMap<>();
+                    infoMap.put("deltaXZ", dxz);
+                    infoMap.put("lastDeltaXZ", lastdxz);
+                    infoMap.put("frictionAppliedLastDeltaXZ", appliedLastDxz);
+                    infoMap.put("equalness", equalness);
+                    flag(infoMap, profile, e, MoveEvent.CancelType.get((String) getSettings().getSetting("cancel-type")));
+                }
+            }else{
+                preVL.deaccumulate(profile);
+            }
+        }
 
-//        if(dYaw > 1.5f && dxz > .15D){
-            profile.sendMessage(String.valueOf(acc));
-//        }
     }
 }
