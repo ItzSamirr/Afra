@@ -8,10 +8,10 @@ flag:
       info-format: "&3{key}: &b{value}"
       text:
         - "&3{player} &b| &3Ping: &b{ping}"
-        - ""
+        - " "
         - " &3Description:"
         - "&b{desc}"
-        - ""
+        - " "
         - " &3Info:"
         - "&b{info}"
 checks:
@@ -26,4 +26,4 @@ checks:
         buffer:
           deaccumulator: 1.0
           accumulator: 2.0
-          max: 6.0
+          max: 4.0

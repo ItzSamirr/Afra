@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.check.CheckCategory;
 import it.itzsamirr.afra.api.check.annotations.Experimental;
+import it.itzsamirr.afra.api.check.annotations.Testing;
 import it.itzsamirr.afra.api.event.Event;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.check.Check;
@@ -16,6 +17,7 @@ import org.bukkit.Location;
 import java.util.HashMap;
 
 @Experimental(dev = true)
+@Testing
 public class JumpA extends Check {
     public JumpA(Afra plugin) {
         super(plugin, CheckCategory.MOVEMENT, "Jump", 'A', "Checks if a player jumps longer than usual");

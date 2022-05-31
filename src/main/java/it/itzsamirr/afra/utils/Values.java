@@ -13,7 +13,7 @@ public final class Values {
     public static final ArrayList<String> steppableMaterials;
 
     static{
-        MAX_JUMP_TICKS_IN_AIR = 5;
+        MAX_JUMP_TICKS_IN_AIR = 6;
         steppableMaterials = new ArrayList<>(Arrays.asList("STAIRS", "STEP", "LADDER"));
     }
 

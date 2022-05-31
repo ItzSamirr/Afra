@@ -8,6 +8,7 @@ import it.itzsamirr.afra.api.check.info.ICheckInfo;
 import it.itzsamirr.afra.api.check.settings.ICheckSettings;
 import it.itzsamirr.afra.api.check.violation.IPreVL;
 import it.itzsamirr.afra.api.event.Cancellable;
+import it.itzsamirr.afra.api.event.check.CheckFlagEvent;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.api.utils.Color;
 import it.itzsamirr.afra.check.info.CheckInfo;
@@ -91,20 +92,20 @@ public abstract class Check implements ICheck {
 
     @Override
     public void flag(HashMap<String, Object> infoMap, IProfile profile, Cancellable cancellable, int type) {
-
+        CheckFlagEvent flagEvent = new CheckFlagEvent(profile, this, infoMap);
+        plugin.getEventManager().call(flagEvent);
+        if(!flagEvent.isAllowed()) return;
         if(plugin.getConfig().getBoolean("flag.msg.enabled")) {
-            BaseComponent component = new TextComponent(Color.translate(plugin.getConfig().getString("flag.msg.text")).replace("{prefix}", Color.translate(plugin.getConfig().getString("prefix"))).replace("{player}", profile.getPlayer().getName()).replace("{check}", getInfo().getName()).replace("{type}", String.valueOf(getInfo().getType())));
+            TextComponent component = new TextComponent(Color.translate(plugin.getConfig().getString("flag.msg.text")).replace("{prefix}", Color.translate(plugin.getConfig().getString("prefix"))).replace("{player}", profile.getPlayer().getName()).replace("{check}", getInfo().getName()).replace("{type}", String.valueOf(getInfo().getType())));
             if(plugin.getConfig().getBoolean("flag.msg.hover.enabled")){
                 List<String> hoverList = plugin.getConfig().getStringList("flag.msg.hover.text");
-                BaseComponent[] hoverComponents = new BaseComponent[hoverList.size()];
-                if(!hoverList.isEmpty())
-                {
+                BaseComponent[] hoverComponents = new TextComponent[hoverList.size()];
                     for (int i = 0; i < hoverList.size(); i++) {
                         hoverComponents[i] = new TextComponent(Color.translate(hoverList.get(i).replace("{desc}", getInfo().getDescription()).replace("{info}", generateFormattedInfo(infoMap)).replace("{player}", profile.getPlayer().getName()).replace("{ping}", String.valueOf(profile.getPing()))) + "\n");
                     }
-                }
                 component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponents));
             }
+            profile.sendMessage(component);
         }
         cancellable.cancel(type);
     }

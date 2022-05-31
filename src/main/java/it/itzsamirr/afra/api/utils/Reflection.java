@@ -18,14 +18,19 @@ public class Reflection {
     static{
         try {
             String temp = Bukkit.getServer().getClass().getPackage().getName();
-            VERSION = temp.substring(temp.lastIndexOf(".") + 1);
+            VERSION = temp.split("\\.")[3];
         }catch(Exception e){
             VERSION = "";
         }
-        craftPlayerClass = getClass("{cb}CraftPlayer");
-        entityPlayerClass = getClass("{nms}EntityPlayer");
-        getHandleMethod = getMethod(craftPlayerClass, "getHandle");
-        pingField = getField(entityPlayerClass, "ping");
+        try {
+            craftPlayerClass = getClass("{cb}entity.CraftPlayer");
+            entityPlayerClass = getClass("{nms}EntityPlayer");
+            getHandleMethod = getMethod(craftPlayerClass, "getHandle");
+            pingField = getField(entityPlayerClass, "ping");
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     public static int getPing(Player player){
@@ -36,11 +41,17 @@ public class Reflection {
         }
     }
 
+    public static Object getCraftPlayer(Player player){
+        if(player == null) System.out.println("null");
+        return craftPlayerClass.cast(player);
+    }
+
     public static Object getEntityPlayer(Player player){
         try {
-            return getHandleMethod.invoke(player);
+            return getHandleMethod.invoke(getCraftPlayer(player));
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 
@@ -48,9 +59,10 @@ public class Reflection {
         try {
             return Class.forName(name
                     .replace("{nms}", !VERSION.isEmpty() ? "net.minecraft.server." + VERSION + "." : "net.minecraft.server.")
-                    .replace("{cb}", !VERSION.isEmpty() ? "org.craftbukkit." + VERSION + "." : "org.craftbukkit."));
+                    .replace("{cb}", !VERSION.isEmpty() ? "org.bukkit.craftbukkit." + VERSION + "." : "org.bukkit.craftbukkit."));
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;
         }
     }
 

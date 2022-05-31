@@ -48,7 +48,7 @@ public final class Profile implements IProfile {
 
     @Override
     public int getYJumpModifier() {
-        return player.hasPotionEffect(PotionEffectType.JUMP) ? getEffect(PotionEffectType.JUMP).getAmplifier()+1 : 0;
+        return player.hasPotionEffect(PotionEffectType.JUMP) ? getEffect(PotionEffectType.JUMP).getAmplifier() : 0;
     }
 
     @Override
@@ -96,9 +96,7 @@ public final class Profile implements IProfile {
 
     @Override
     public void sendMessage(BaseComponent... components) {
-        List<BaseComponent> componentList = Arrays.asList(components);
-        componentList.replaceAll(comp -> new TextComponent(Color.translate(comp.toPlainText())));
-        componentList.forEach(comp -> spigot().sendMessage(comp));
+        player.spigot().sendMessage(components);
     }
 
     @Override
