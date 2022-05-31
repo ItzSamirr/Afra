@@ -5,6 +5,7 @@ import it.itzsamirr.afra.api.check.settings.ICheckSettings;
 import it.itzsamirr.afra.api.check.violation.IPreVL;
 import it.itzsamirr.afra.api.event.Cancellable;
 import it.itzsamirr.afra.api.event.listener.Listener;
+import it.itzsamirr.afra.api.profile.IProfile;
 
 public interface ICheck extends Listener {
     void reload();
@@ -15,6 +16,6 @@ public interface ICheck extends Listener {
     boolean isEnabled();
     boolean isExperimental();
     boolean isDev();
-    void flag(String msg, Cancellable cancellable, int type);
+    void flag(String msg, IProfile profile, Cancellable cancellable, int type);
 
 }

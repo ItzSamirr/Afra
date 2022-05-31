@@ -16,4 +16,5 @@ public interface ICheckManager {
                 .collect(Collectors.toList());
     }
     boolean isExperimental(Class<?> clazz);
+    boolean isTesting(Class<?> clazz);
 }

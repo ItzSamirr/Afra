@@ -24,7 +24,7 @@ public class Reflection {
         }
         craftPlayerClass = getClass("{cb}CraftPlayer");
         entityPlayerClass = getClass("{nms}EntityPlayer");
-        getHandleMethod = getMethod(entityPlayerClass, "getHandle");
+        getHandleMethod = getMethod(craftPlayerClass, "getHandle");
         pingField = getField(entityPlayerClass, "ping");
     }
 

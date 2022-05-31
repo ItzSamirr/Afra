@@ -1,18 +1,18 @@
-prefix: "&9[&1&lAfra&9] &r"
+prefix: "&b[&3&lAfra&b] &r"
 flag:
   msg:
     enabled: true
-    text: "{prefix}&1{player} &9failed &1{check} &9(&1{type}&9)"
+    text: "{prefix}&3{player} &bfailed &3{check} &b(&3{type}&b)"
     hover:
       enabled: true
       text:
-        - "&1{player} &9| &1Ping: &9{ping}"
+        - "&3{player} &b| &3Ping: &b{ping}"
         - ""
-        - " &1Description:"
-        - "&9{desc}"
+        - " &3Description:"
+        - "&b{desc}"
         - ""
-        - " &1Info:"
-        - "&9{info}"
+        - " &3Info:"
+        - "&b{info}"
 checks:
   movement:
     jump:
@@ -21,7 +21,7 @@ checks:
       #
       a:
         enabled: true
-        info: "&1Ticks: &9{ticks}, &1Max: &9{max}"
+        info: "&3Ticks: &b{ticks}, &3Max: &b{max}"
         cancel-type: "PULLDOWN"
         buffer:
           deaccumulator: 1.0

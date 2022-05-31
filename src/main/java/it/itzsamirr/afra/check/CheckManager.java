@@ -4,9 +4,11 @@ import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.check.ICheck;
 import it.itzsamirr.afra.api.check.ICheckManager;
 import it.itzsamirr.afra.api.check.annotations.Experimental;
+import it.itzsamirr.afra.api.check.annotations.Testing;
 import it.itzsamirr.afra.check.movement.jump.JumpA;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public final class CheckManager implements ICheckManager {
@@ -21,10 +23,18 @@ public final class CheckManager implements ICheckManager {
 
     @Override
     public void register(ICheck... checks) {
-        for(ICheck check : checks)
-        {
-            check.init();
-            this.checks.add(check);
+        List<ICheck> checksList = Arrays.asList(checks);
+        if(checksList.stream().anyMatch(check -> isTesting(check.getClass()))){
+            checksList.stream().filter(check -> isTesting(check.getClass()))
+                    .forEach(check -> {
+                        this.checks.add(check);
+                        check.init();
+                    });
+        }else{
+            checksList.forEach(check -> {
+                this.checks.add(check);
+                check.init();
+            });
         }
     }
 
@@ -50,5 +60,10 @@ public final class CheckManager implements ICheckManager {
     @Override
     public boolean isExperimental(Class<?> clazz) {
         return clazz.isAnnotationPresent(Experimental.class);
+    }
+
+    @Override
+    public boolean isTesting(Class<?> clazz) {
+        return clazz.isAnnotationPresent(Testing.class);
     }
 }
