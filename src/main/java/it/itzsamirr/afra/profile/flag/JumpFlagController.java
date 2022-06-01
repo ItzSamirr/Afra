@@ -21,7 +21,7 @@ public class JumpFlagController implements IFlagController {
                 parent.isMaterialGlideable(loc.clone().add(-parent.getPlayerWidth()/2, 0, -parent.getPlayerWidth()/2).getBlock().getType()) ||
                 parent.isMaterialGlideable(loc.clone().add(0, 0, -parent.getPlayerWidth()/2).getBlock().getType()) ||
                 parent.isMaterialGlideable(loc.clone().add(0, 0, parent.getPlayerWidth()/2).getBlock().getType()) ||
-                parent.isOnGround();
+                parent.isNearGround();
     }
 
     @Override

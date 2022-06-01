@@ -25,7 +25,7 @@ checks:
         enabled: true
         cancel-type: "SETBACK"
         punishable: true
-        kick-reason: "[Afra] Cheating\n [A]"
+        kick-reason: "[Afra] Cheating\n Speed [A]"
         vl:
           max: 25
           accumulator: 1
@@ -38,15 +38,16 @@ checks:
       a:
         bypass: true
         enabled: true
-        kick-reason: "[Afra] Cheating\n [A]"
+        punishable: true
+        kick-reason: "[Afra] Cheating\n NoFall [A]"
         vl:
           max: 10
           accumulator: 1
-          deaccumulator: 1
+          decay: 1
         buffer:
           decay: 1.0
           accumulator: 1.0
-          max: 4.0
+          max: 2.0
     jump:
       #
       # WARNING: Experimental & Unstable!

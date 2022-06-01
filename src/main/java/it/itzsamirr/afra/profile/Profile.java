@@ -147,7 +147,7 @@ public final class Profile implements IProfile {
     }
 
     @Override
-    public boolean isOnGround() {
+    public boolean isNearGround() {
         Location location = getLocation();
         double ex = 0.3d;
         for(double x = -ex;x<=ex;x+=ex){
@@ -156,6 +156,18 @@ public final class Profile implements IProfile {
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isOnGround() {
+        Location loc = getLocation();
+        return loc.getBlock().getLocation().clone().add(0, -1, 0).getBlock().getType().isSolid() || loc.clone().add(PLAYER_WIDTH/2, -1,0).getBlock().getType().isSolid()
+                || loc.clone().add(PLAYER_WIDTH/2, -1, PLAYER_WIDTH/2).getBlock().getType().isSolid()
+                || loc.clone().add(PLAYER_WIDTH/2, -1, -PLAYER_WIDTH/2).getBlock().getType().isSolid()
+                || loc.clone().add(-PLAYER_WIDTH/2, -1, 0).getBlock().getType().isSolid()
+                || loc.clone().add(-PLAYER_WIDTH/2, -1,-PLAYER_WIDTH/2).getBlock().getType().isSolid()
+                || loc.clone().add(0, -1,-PLAYER_WIDTH/2).getBlock().getType().isSolid()
+                || loc.clone().add(0, -1, PLAYER_WIDTH/2).getBlock().getType().isSolid();
     }
 
     @Override

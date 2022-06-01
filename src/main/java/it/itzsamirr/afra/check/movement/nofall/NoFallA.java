@@ -16,14 +16,14 @@ import java.util.HashMap;
 import java.util.List;
 
 @Experimental(dev = true)
-//TODO: FIX
 public class NoFallA extends Check {
     public NoFallA(Afra plugin) {
-        super(plugin, CheckCategory.MOVEMENT, "NoFall", 'A', "Checks if the player is spoofing the onground value when falling");
+        super(plugin, CheckCategory.MOVEMENT, "NoFall", 'A', "Checks if the player is spoofing the client ground");
     }
 
     @Override
     public void on(Event event) {
+        if(!(event instanceof MoveEvent)) return;
         MoveEvent e = (MoveEvent) event;
         if(!isEnabled()) {
             if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
@@ -37,19 +37,17 @@ public class NoFallA extends Check {
         Location to = e.getTo();
         Distance d = new Distance(from, to);
         IProfile profile = e.getProfile();
-        boolean onGroundServer = profile.isLastOnGround();
+        boolean onGroundServer = profile.isOnGround();
+        boolean lastOnGroundServer = profile.isLastOnGround();
         boolean onGroundClient = profile.getPlayer().isOnGround();
-        if(onGroundServer)
+        if(!onGroundServer && !lastOnGroundServer &&  onGroundClient)
         {
             HashMap<String, Object> infoMap = new HashMap<>();
             infoMap.put("onGroundClient", onGroundClient);
             infoMap.put("onGroundServer", onGroundServer);
+            infoMap.put("lastOnGroundServer", onGroundServer);
             flag(infoMap, profile, e, 0);
         }
     }
 
-    @Override
-    public List<Class<? extends Event>> getFilter() {
-        return Arrays.asList(MoveEvent.class);
-    }
 }

@@ -33,6 +33,7 @@ public interface IProfile {
     void sendMessage(BaseComponent... components);
     Player.Spigot spigot();
     int getPing();
+    boolean isNearGround();
     boolean isOnGround();
     boolean isLastOnGround();
     void setLastOnGround(boolean onGround);

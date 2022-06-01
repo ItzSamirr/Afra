@@ -48,7 +48,7 @@ public class SpeedA extends Check {
             }
             return;
         }
-        if(!profile.isOnGround() && !profile.isLastOnGround()) {
+        if(!profile.isNearGround() && !profile.isLastOnGround()) {
             final double lastdxz = profile.getLastDistance().getDXZ();
             final double dxz = d.getDXZ();
             final double appliedLastDxz = lastdxz * Values.FRICTION;

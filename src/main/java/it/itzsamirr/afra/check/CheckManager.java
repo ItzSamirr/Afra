@@ -20,7 +20,7 @@ public final class CheckManager implements ICheckManager {
     public CheckManager(Afra plugin)
     {
         this.plugin = plugin;
-        register(new JumpA(plugin), new SpeedA(plugin));
+        register(new JumpA(plugin), new SpeedA(plugin), new NoFallA(plugin));
     }
 
     @Override
