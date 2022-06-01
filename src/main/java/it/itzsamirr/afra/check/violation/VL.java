@@ -16,18 +16,13 @@ public class VL implements IVL {
 
     @Override
     public void accumulate(IProfile profile) {
-        if(!map.containsKey(profile))
-        {
-            set(profile, (int)getParent().getSettings().getSetting("vl.accumulator"));
-        }else {
-            set(profile, get(profile) + (int) getParent().getSettings().getSetting("vl.accumulator"));
-        }
+        set(profile, get(profile) + (int) getParent().getSettings().getSetting("vl.accumulator"));
     }
 
     @Override
-    public void deaccumulate(IProfile profile) {
+    public void decay(IProfile profile) {
         if(get(profile) != 0) {
-            map.put(profile, get(profile) - (int) getParent().getSettings().getSetting("vl.deaccumulator"));
+            map.put(profile, get(profile) - (int) getParent().getSettings().getSetting("vl.decay"));
         }
         if(get(profile) < 0){
             set(profile, 0);

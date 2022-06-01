@@ -1,5 +1,7 @@
 prefix: "&b[&3&lAfra&b] &r"
 bypass: true
+experimental: "&cExperimental&r"
+dev: "&4Dev&r"
 flag:
   msg:
     enabled: true
@@ -8,7 +10,7 @@ flag:
       enabled: true
       info-format: "&3{key}: &b{value}"
       text:
-        - "&3{player} &b| &3Ping: &b{ping}"
+        - "&3{player} &b| &3{uuid} &b| &3Ping: &b{ping}"
         - " "
         - " &3Description:"
         - "&b{desc}"
@@ -21,9 +23,9 @@ checks:
       a:
         bypass: true
         enabled: true
-        cancel-type: "NOTHING"
+        cancel-type: "SETBACK"
         punishable: true
-        kick-reason: "[Afra] Speed [A]"
+        kick-reason: "[Afra] Cheating\n [A]"
         vl:
           max: 25
           accumulator: 1
@@ -36,11 +38,11 @@ checks:
       a:
         bypass: true
         enabled: true
-        kick-reason: "[Afra] NoFall [A]"
-          vl:
-            max: 10
-            accumulator: 1
-            deaccumulator: 1
+        kick-reason: "[Afra] Cheating\n [A]"
+        vl:
+          max: 10
+          accumulator: 1
+          deaccumulator: 1
         buffer:
           decay: 1.0
           accumulator: 1.0
@@ -54,7 +56,7 @@ checks:
         enabled: true
         cancel-type: "PULLDOWN"
         punishable: true
-        kick-reason: "[Afra] Jump [A]"
+        kick-reason: "[Afra] Cheating\n Jump [A]"
         vl:
           max: 5
           accumulator: 1

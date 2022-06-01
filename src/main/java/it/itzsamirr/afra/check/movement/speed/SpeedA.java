@@ -3,7 +3,6 @@ package it.itzsamirr.afra.check.movement.speed;
 import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.check.CheckCategory;
 import it.itzsamirr.afra.api.check.annotations.Experimental;
-import it.itzsamirr.afra.api.check.annotations.Testing;
 import it.itzsamirr.afra.api.event.Event;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.check.Check;
@@ -15,9 +14,7 @@ import org.bukkit.Location;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 @Experimental(dev = true)
 public class SpeedA extends Check {
@@ -44,7 +41,7 @@ public class SpeedA extends Check {
         if(profile.getFlagController(SpeedFlagController.class).shouldNotFlag())
         {
             if(preVL.get(profile) != .0){
-                preVL.deaccumulate(profile);
+                preVL.decay(profile);
             }
             if(preVL.get(profile) < .0){
                 preVL.set(profile, .0);
@@ -67,7 +64,7 @@ public class SpeedA extends Check {
                 }
             }else{
                 if(preVL.get(profile) != .0) {
-                    preVL.deaccumulate(profile);
+                    preVL.decay(profile);
                 }
                 if(preVL.get(profile) < .0){
                     preVL.set(profile, .0);

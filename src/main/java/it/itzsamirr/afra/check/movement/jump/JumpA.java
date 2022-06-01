@@ -1,10 +1,8 @@
 package it.itzsamirr.afra.check.movement.jump;
 
-import com.google.common.collect.Maps;
 import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.check.CheckCategory;
 import it.itzsamirr.afra.api.check.annotations.Experimental;
-import it.itzsamirr.afra.api.check.annotations.Testing;
 import it.itzsamirr.afra.api.event.Event;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.check.Check;
@@ -42,7 +40,7 @@ public class JumpA extends Check {
             if(profile.getFlagController(JumpFlagController.class).shouldNotFlag())
             {
                 if(preVL.get(profile) != .0){
-                    preVL.deaccumulate(profile);
+                    preVL.decay(profile);
                 }
                 if(preVL.get(profile) < .0){
                     preVL.set(profile, .0);
@@ -67,13 +65,13 @@ public class JumpA extends Check {
                         }
                     }
                 }else if(preVL.get(profile) != .0){
-                    preVL.deaccumulate(profile);
+                    preVL.decay(profile);
                     if(preVL.get(profile) < .0){
                         preVL.set(profile, .0);
                     }
                 }
             }else if(preVL.get(profile) != .0){
-                preVL.deaccumulate(profile);
+                preVL.decay(profile);
                 if(preVL.get(profile) < .0){
                     preVL.set(profile, .0);
                 }

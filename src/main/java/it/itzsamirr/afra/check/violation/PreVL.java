@@ -40,8 +40,8 @@ public final class PreVL implements IPreVL {
     }
 
     @Override
-    public double deaccumulate(IProfile profile) {
-        set(profile, get(profile)-(double)parent.getSettings().getSetting("buffer.deaccumulator"));
+    public double decay(IProfile profile) {
+        set(profile, get(profile)-(double)parent.getSettings().getSetting("buffer.decay"));
         return get(profile);
     }
 

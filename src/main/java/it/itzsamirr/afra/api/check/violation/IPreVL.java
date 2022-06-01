@@ -9,7 +9,7 @@ public interface IPreVL {
     double get(IProfile profile);
     void set(IProfile profile, double value);
     double accumulate(IProfile profile);
-    double deaccumulate(IProfile profile);
+    double decay(IProfile profile);
     ICheck getParent();
     boolean isMax(IProfile profile);
     HashMap<IProfile, Double> getMap();

@@ -107,15 +107,14 @@ public abstract class Check implements ICheck {
         CheckFlagEvent flagEvent = new CheckFlagEvent(profile, this, infoMap);
         plugin.getEventManager().call(flagEvent);
         if(!flagEvent.isAllowed()) return;
-        if(vl == null) System.out.println("null");
         vl.accumulate(profile);
         if(plugin.getConfig().getBoolean("flag.msg.enabled")) {
-            TextComponent component = new TextComponent(Color.translate(plugin.getConfig().getString("flag.msg.text")).replace("{prefix}", Color.translate(plugin.getConfig().getString("prefix"))).replace("{player}", profile.getPlayer().getName()).replace("{check}", getInfo().getName()).replace("{type}", String.valueOf(getInfo().getType())).replace("{vl}", String.valueOf(vl.get(profile))).replace("{max}", String.valueOf((int)getSettings().getSetting("vl.max"))));
+            TextComponent component = new TextComponent(Color.translate(plugin.getConfig().getString("flag.msg.text")).replace("{prefix}", Color.translate(plugin.getConfig().getString("prefix"))).replace("{player}", profile.getPlayer().getName()).replace("{check}", getInfo().getName()).replace("{type}", String.valueOf(getInfo().getType())).replace("{vl}", String.valueOf(vl.get(profile))).replace("{max}", String.valueOf((int)getSettings().getSetting("vl.max"))) + Color.translate(isExperimental() ? (isDev() ? " " + plugin.getConfig().getString("dev") : " " + plugin.getConfig().getString("experimental")) : ""));
             if(plugin.getConfig().getBoolean("flag.msg.hover.enabled")){
                 List<String> hoverList = plugin.getConfig().getStringList("flag.msg.hover.text");
                 BaseComponent[] hoverComponents = new TextComponent[hoverList.size()];
                     for (int i = 0; i < hoverList.size(); i++) {
-                        hoverComponents[i] = new TextComponent(Color.translate(hoverList.get(i).replace("{desc}", getInfo().getDescription()).replace("{info}", generateFormattedInfo(infoMap)).replace("{player}", profile.getPlayer().getName()).replace("{ping}", String.valueOf(profile.getPing()))) + "\n");
+                        hoverComponents[i] = new TextComponent(Color.translate(hoverList.get(i).replace("{desc}", getInfo().getDescription()).replace("{info}", generateFormattedInfo(infoMap)).replace("{player}", profile.getPlayer().getName()).replace("{ping}", String.valueOf(profile.getPing())).replace("{uuid}", profile.getPlayer().getUniqueId().toString())) + "\n");
                     }
                 component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponents));
             }
