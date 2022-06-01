@@ -7,6 +7,7 @@ import it.itzsamirr.afra.api.check.annotations.Experimental;
 import it.itzsamirr.afra.api.check.info.ICheckInfo;
 import it.itzsamirr.afra.api.check.settings.ICheckSettings;
 import it.itzsamirr.afra.api.check.violation.IPreVL;
+import it.itzsamirr.afra.api.check.violation.IVL;
 import it.itzsamirr.afra.api.event.Cancellable;
 import it.itzsamirr.afra.api.event.check.CheckFlagEvent;
 import it.itzsamirr.afra.api.profile.IProfile;
@@ -14,6 +15,7 @@ import it.itzsamirr.afra.api.utils.Color;
 import it.itzsamirr.afra.check.info.CheckInfo;
 import it.itzsamirr.afra.check.settings.CheckSettings;
 import it.itzsamirr.afra.check.violation.PreVL;
+import it.itzsamirr.afra.check.violation.VL;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -24,6 +26,7 @@ public abstract class Check implements ICheck {
     protected ICheckSettings settings;
     protected ICheckInfo info;
     protected IPreVL preVL;
+    protected IVL vl;
     protected final Afra plugin;
 
     public Check(Afra plugin, ICheckInfo info) {
@@ -31,6 +34,12 @@ public abstract class Check implements ICheck {
         this.info = info;
         this.settings = new CheckSettings(plugin, this);
         this.preVL = new PreVL(this);
+        this.vl = new VL(this);
+    }
+
+    @Override
+    public IVL getVL() {
+        return vl;
     }
 
     public Check(Afra plugin, CheckCategory category, String name, char type){
@@ -38,6 +47,7 @@ public abstract class Check implements ICheck {
         this.info = new CheckInfo(this, category, name, type);
         this.settings = new CheckSettings(plugin, this);
         this.preVL = new PreVL(this);
+        this.vl = new VL(this);
     }
 
     public Check(Afra plugin, CheckCategory category, String name, char type, String description){
@@ -45,6 +55,7 @@ public abstract class Check implements ICheck {
         this.info = new CheckInfo(this, category, name, type, description);
         this.settings = new CheckSettings(plugin, this);
         this.preVL = new PreVL(this);
+        this.vl = new VL(this);
     }
 
     @Override
@@ -52,6 +63,7 @@ public abstract class Check implements ICheck {
     public void reload() {
         this.settings = new CheckSettings(plugin, this);
         this.preVL = new PreVL(this);
+        this.vl = new VL(this);
     }
 
     @Override
@@ -95,8 +107,10 @@ public abstract class Check implements ICheck {
         CheckFlagEvent flagEvent = new CheckFlagEvent(profile, this, infoMap);
         plugin.getEventManager().call(flagEvent);
         if(!flagEvent.isAllowed()) return;
+        if(vl == null) System.out.println("null");
+        vl.accumulate(profile);
         if(plugin.getConfig().getBoolean("flag.msg.enabled")) {
-            TextComponent component = new TextComponent(Color.translate(plugin.getConfig().getString("flag.msg.text")).replace("{prefix}", Color.translate(plugin.getConfig().getString("prefix"))).replace("{player}", profile.getPlayer().getName()).replace("{check}", getInfo().getName()).replace("{type}", String.valueOf(getInfo().getType())));
+            TextComponent component = new TextComponent(Color.translate(plugin.getConfig().getString("flag.msg.text")).replace("{prefix}", Color.translate(plugin.getConfig().getString("prefix"))).replace("{player}", profile.getPlayer().getName()).replace("{check}", getInfo().getName()).replace("{type}", String.valueOf(getInfo().getType())).replace("{vl}", String.valueOf(vl.get(profile))).replace("{max}", String.valueOf((int)getSettings().getSetting("vl.max"))));
             if(plugin.getConfig().getBoolean("flag.msg.hover.enabled")){
                 List<String> hoverList = plugin.getConfig().getStringList("flag.msg.hover.text");
                 BaseComponent[] hoverComponents = new TextComponent[hoverList.size()];
@@ -108,6 +122,10 @@ public abstract class Check implements ICheck {
             profile.sendMessage(component);
         }
         cancellable.cancel(type);
+        if(vl.isMax(profile) && (boolean)getSettings().getSetting("punishable"))
+        {
+            profile.getPlayer().kickPlayer((String)getSettings().getSetting("kick-reason"));
+        }
     }
 
     @Override

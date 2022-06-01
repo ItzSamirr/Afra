@@ -5,6 +5,7 @@ import it.itzsamirr.afra.api.profile.flag.IFlagController;
 import it.itzsamirr.afra.api.utils.Color;
 import it.itzsamirr.afra.api.utils.Reflection;
 import it.itzsamirr.afra.profile.flag.JumpFlagController;
+import it.itzsamirr.afra.profile.flag.SpeedFlagController;
 import it.itzsamirr.afra.utils.Distance;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Location;
@@ -35,6 +36,7 @@ public final class Profile implements IProfile {
         lastGroundLocation = null;
         lastDistance = new Distance(player.getLocation(), player.getLocation());
         flagControllers.add(new JumpFlagController(this));
+        flagControllers.add(new SpeedFlagController(this));
     }
 
     @Override

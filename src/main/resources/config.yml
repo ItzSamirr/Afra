@@ -3,7 +3,7 @@ bypass: true
 flag:
   msg:
     enabled: true
-    text: "{prefix}&3{player} &bfailed &3{check} &b(&3{type}&b)"
+    text: "{prefix}&3{player} &bfailed &3{check} &b[&3{type}&b] (&3{vl}&b/&3{max}&b)"
     hover:
       enabled: true
       info-format: "&3{key}: &b{value}"
@@ -21,19 +21,30 @@ checks:
       a:
         bypass: true
         enabled: true
-        cancel-type: NOTHING
+        cancel-type: "NOTHING"
+        punishable: true
+        kick-reason: "[Afra] Speed [A]"
+        vl:
+          max: 25
+          accumulator: 1
+          decay: 1
         buffer:
-          deaccumulator: 1.0
+          decay: 1.0
           accumulator: 1.0
           max: 2.0
     nofall:
       a:
-        bypass: false
+        bypass: true
         enabled: true
+        kick-reason: "[Afra] NoFall [A]"
+          vl:
+            max: 10
+            accumulator: 1
+            deaccumulator: 1
         buffer:
-          deaccumulator: 1.0
+          decay: 1.0
           accumulator: 1.0
-          max: 2.0
+          max: 4.0
     jump:
       #
       # Experimental - Unstable!
@@ -42,7 +53,13 @@ checks:
         bypass: true
         enabled: true
         cancel-type: "PULLDOWN"
+        punishable: true
+        kick-reason: "[Afra] Jump [A]"
+        vl:
+          max: 5
+          accumulator: 1
+          decay: 1
         buffer:
-          deaccumulator: 1.0
+          decay: 1.0
           accumulator: 1.0
           max: 1.0

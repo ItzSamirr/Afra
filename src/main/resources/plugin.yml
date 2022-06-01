@@ -8,5 +8,5 @@ permissions:
     children:
       - afra.bypass.*
   afra.bypass.*:
-
+    description: permission to bypass all checks
 authors: [ ItzSamirr ]

@@ -8,10 +8,13 @@ import it.itzsamirr.afra.api.event.Event;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.check.Check;
 import it.itzsamirr.afra.api.event.profile.MoveEvent;
+import it.itzsamirr.afra.profile.flag.SpeedFlagController;
 import it.itzsamirr.afra.utils.Distance;
 import it.itzsamirr.afra.utils.Values;
 import org.bukkit.Location;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +41,16 @@ public class SpeedA extends Check {
         Location to = e.getTo();
         Distance d = new Distance(from, to);
         IProfile profile = e.getProfile();
+        if(profile.getFlagController(SpeedFlagController.class).shouldNotFlag())
+        {
+            if(preVL.get(profile) != .0){
+                preVL.deaccumulate(profile);
+            }
+            if(preVL.get(profile) < .0){
+                preVL.set(profile, .0);
+            }
+            return;
+        }
         if(!profile.isOnGround() && !profile.isLastOnGround()) {
             final double lastdxz = profile.getLastDistance().getDXZ();
             final double dxz = d.getDXZ();
@@ -48,14 +61,17 @@ public class SpeedA extends Check {
                 preVL.accumulate(profile);
                 if(preVL.isMax(profile)) {
                     HashMap<String, Object> infoMap = new HashMap<>();
-                    infoMap.put("deltaXZ", dxz);
-                    infoMap.put("lastDeltaXZ", lastdxz);
-                    infoMap.put("frictionAppliedLastDeltaXZ", appliedLastDxz);
-                    infoMap.put("equalness", equalness);
+                    infoMap.put("frictionAppliedLastDeltaXZ", new BigDecimal(appliedLastDxz).setScale(5, RoundingMode.HALF_UP).doubleValue());
+                    infoMap.put("equalness", new BigDecimal(equalness).setScale(5, RoundingMode.HALF_UP).doubleValue());
                     flag(infoMap, profile, e, MoveEvent.CancelType.get((String) getSettings().getSetting("cancel-type")));
                 }
             }else{
-                preVL.deaccumulate(profile);
+                if(preVL.get(profile) != .0) {
+                    preVL.deaccumulate(profile);
+                }
+                if(preVL.get(profile) < .0){
+                    preVL.set(profile, .0);
+                }
             }
         }
 
