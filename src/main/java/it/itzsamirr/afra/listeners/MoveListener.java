@@ -4,7 +4,6 @@ import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.api.event.profile.MoveEvent;
 import it.itzsamirr.afra.utils.Distance;
-import jdk.nashorn.internal.ir.Block;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
