@@ -21,7 +21,7 @@ public interface Listener extends Comparable<Listener>{
         return o.getPriority().getValue() - getPriority().getValue();
     }
 
-    public static enum Priority{
+    enum Priority{
         LOWEST((byte)1),
         LOW((byte)2),
         NORMAL((byte)3),

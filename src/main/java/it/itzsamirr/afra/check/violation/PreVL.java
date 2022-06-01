@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public final class PreVL implements IPreVL {
     private final ICheck parent;
-    private HashMap<IProfile, Double> preVl = new HashMap<>();
+    private final HashMap<IProfile, Double> preVl = new HashMap<>();
 
     public PreVL(ICheck parent) {
         this.parent = parent;

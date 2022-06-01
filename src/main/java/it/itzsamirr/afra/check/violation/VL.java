@@ -7,7 +7,7 @@ import it.itzsamirr.afra.api.profile.IProfile;
 import java.util.HashMap;
 
 public class VL implements IVL {
-    private HashMap<IProfile, Integer> map = new HashMap<>();
+    private final HashMap<IProfile, Integer> map = new HashMap<>();
     private final ICheck parent;
 
     public VL(ICheck parent) {

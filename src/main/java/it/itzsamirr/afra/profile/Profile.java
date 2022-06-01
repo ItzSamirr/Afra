@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 public final class Profile implements IProfile {
-    private Player player;
+    private final Player player;
     private Vector appliedVelocity = new Vector();
     private Distance lastDistance = null;
     private final double PLAYER_WIDTH = .6;
@@ -29,7 +29,7 @@ public final class Profile implements IProfile {
     private boolean lastOnGround = false;
     private long groundTicks = 0, lastGroundTicks = 0, jumpTicks = 0, lastJumpTicks = 0;
     private Location lastGroundLocation;
-    private List<IFlagController> flagControllers = new ArrayList<>();
+    private final List<IFlagController> flagControllers = new ArrayList<>();
 
     public Profile(Player player) {
         this.player = player;

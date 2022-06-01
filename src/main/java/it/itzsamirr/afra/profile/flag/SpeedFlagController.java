@@ -4,7 +4,7 @@ import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.api.profile.flag.IFlagController;
 
 public class SpeedFlagController implements IFlagController {
-    private IProfile parent;
+    private final IProfile parent;
 
     public SpeedFlagController(IProfile parent) {
         this.parent = parent;

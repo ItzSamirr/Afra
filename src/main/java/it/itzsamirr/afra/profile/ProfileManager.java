@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public final class ProfileManager implements IProfileManager {
-    private List<IProfile> profiles = new ArrayList<>();
+    private final List<IProfile> profiles = new ArrayList<>();
 
     @Override
     public IProfile getProfile(UUID uuid) {

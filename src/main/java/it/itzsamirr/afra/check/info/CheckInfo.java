@@ -6,10 +6,10 @@ import it.itzsamirr.afra.api.check.info.ICheckInfo;
 
 public final class CheckInfo implements ICheckInfo {
     private final ICheck parent;
-    private String name;
-    private String description;
-    private char type;
-    private CheckCategory category;
+    private final String name;
+    private final String description;
+    private final char type;
+    private final CheckCategory category;
 
     public CheckInfo(ICheck parent, CheckCategory category,  String name, char type, String description) {
         this.parent = parent;

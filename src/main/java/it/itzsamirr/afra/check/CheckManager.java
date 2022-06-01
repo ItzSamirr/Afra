@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public final class CheckManager implements ICheckManager {
-    private List<ICheck> checks = new ArrayList<>();
+    private final List<ICheck> checks = new ArrayList<>();
     private final Afra plugin;
 
     public CheckManager(Afra plugin)

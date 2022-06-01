@@ -8,7 +8,7 @@ import java.util.List;
 
 public final class EventManager implements IEventManager {
     private final AfraAPI api;
-    private List<Listener> listeners;
+    private final List<Listener> listeners;
 
     public EventManager(AfraAPI api) {
         this.api = api;

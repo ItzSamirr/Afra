@@ -5,7 +5,7 @@ import it.itzsamirr.afra.api.profile.flag.IFlagController;
 import org.bukkit.Location;
 
 public class JumpFlagController implements IFlagController {
-    private IProfile parent;
+    private final IProfile parent;
 
     public JumpFlagController(IProfile parent) {
         this.parent = parent;
