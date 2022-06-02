@@ -26,11 +26,10 @@ public class NoFallA extends Check {
         if(!(event instanceof MoveEvent)) return;
         MoveEvent e = (MoveEvent) event;
         if(!isEnabled()) {
-            if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
             return;
         }
         if(canBypass(e.getProfile())){
-            if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
+            noFlag(e.getProfile());
             return;
         }
         Location from = e.getFrom();
@@ -47,6 +46,8 @@ public class NoFallA extends Check {
             infoMap.put("onGroundServer", onGroundServer);
             infoMap.put("lastOnGroundServer", onGroundServer);
             flag(infoMap, profile, e, 0);
+        }else{
+            noFlag(profile);
         }
     }
 

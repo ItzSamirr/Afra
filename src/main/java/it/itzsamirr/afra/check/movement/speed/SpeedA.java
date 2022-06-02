@@ -14,7 +14,9 @@ import org.bukkit.Location;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 @Experimental(dev = true)
 public class SpeedA extends Check {
@@ -23,15 +25,19 @@ public class SpeedA extends Check {
     }
 
     @Override
+    public List<Class<? extends Event>> getFilter() {
+        return Arrays.asList(MoveEvent.class);
+    }
+
+    @Override
     public void on(Event event) {
-        if(!(event instanceof MoveEvent)) return;
         MoveEvent e = (MoveEvent) event;
         if(!isEnabled()) {
-            if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
+            noFlag(e.getProfile());
             return;
         }
         if(canBypass(e.getProfile())){
-            if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
+            noFlag(e.getProfile());
             return;
         }
         Location from = e.getFrom();
@@ -40,12 +46,7 @@ public class SpeedA extends Check {
         IProfile profile = e.getProfile();
         if(profile.getFlagController(SpeedFlagController.class).shouldNotFlag())
         {
-            if(preVL.get(profile) != .0){
-                preVL.decay(profile);
-            }
-            if(preVL.get(profile) < .0){
-                preVL.set(profile, .0);
-            }
+            noFlag(profile);
             return;
         }
         if(!profile.isNearGround() && !profile.isLastOnGround()) {
@@ -63,12 +64,7 @@ public class SpeedA extends Check {
                     flag(infoMap, profile, e, MoveEvent.CancelType.get((String) getSettings().getSetting("cancel-type")));
                 }
             }else{
-                if(preVL.get(profile) != .0) {
-                    preVL.decay(profile);
-                }
-                if(preVL.get(profile) < .0){
-                    preVL.set(profile, .0);
-                }
+                noFlag(profile);
             }
         }
 

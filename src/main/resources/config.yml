@@ -6,6 +6,9 @@ flag:
   msg:
     enabled: true
     text: "{prefix}&3{player} &bfailed &3{check} &b[&3{type}&b] (&3{vl}&b/&3{max}&b)"
+    click:
+      enabled: true
+      command: "tp {player}"
     hover:
       enabled: true
       info-format: "&3{key}: &b{value}"
@@ -27,7 +30,7 @@ checks:
         punishable: true
         kick-reason: "[Afra] Cheating\n Speed [A]"
         vl:
-          max: 25
+          max: 15
           accumulator: 1
           decay: 1
         buffer:

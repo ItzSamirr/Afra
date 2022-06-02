@@ -7,6 +7,9 @@ permissions:
     default: op
     children:
       - afra.bypass.*
+      - afra.alerts
+  afra.alerts:
+    description: permission to get the alerts of the anticheat
   afra.bypass.*:
     description: permission to bypass all checks
 authors: [ ItzSamirr ]

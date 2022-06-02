@@ -17,8 +17,11 @@ import it.itzsamirr.afra.check.settings.CheckSettings;
 import it.itzsamirr.afra.check.violation.PreVL;
 import it.itzsamirr.afra.check.violation.VL;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -118,12 +121,35 @@ public abstract class Check implements ICheck {
                     }
                 component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponents));
             }
-            profile.sendMessage(component);
+            if(plugin.getConfig().getBoolean("flag.msg.click.enabled"))
+            {
+                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/" + plugin.getConfig().getString("flag.msg.click.command")));
+            }
+            Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("afra.alerts")).forEach(player -> {
+                player.spigot().sendMessage(component);
+            });
         }
         cancellable.cancel(type);
         if(vl.isMax(profile) && (boolean)getSettings().getSetting("punishable"))
         {
             profile.getPlayer().kickPlayer((String)getSettings().getSetting("kick-reason"));
+        }
+    }
+
+    @Override
+    public void noFlag(IProfile profile) {
+        if(preVL.get(profile) != .0) {
+            preVL.decay(profile);
+        }else{
+            if(vl.get(profile) != 0){
+                vl.decay(profile);
+            }
+            if(vl.get(profile) < 0){
+                vl.reset();
+            }
+        }
+        if(preVL.get(profile) < .0){
+            preVL.set(profile, .0);
         }
     }
 

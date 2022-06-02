@@ -27,9 +27,8 @@ public class JumpA extends Check {
         }
         if(event instanceof MoveEvent){
             MoveEvent e = (MoveEvent) event;
-
             if(canBypass(e.getProfile())){
-                if(preVL.get(e.getProfile()) != .0) preVL.set(e.getProfile(), .0);
+                noFlag(e.getProfile());
                 return;
             }
             Location from = e.getFrom();
@@ -39,12 +38,7 @@ public class JumpA extends Check {
             if(profile.getPlayer().getAllowFlight()) return;
             if(profile.getFlagController(JumpFlagController.class).shouldNotFlag())
             {
-                if(preVL.get(profile) != .0){
-                    preVL.decay(profile);
-                }
-                if(preVL.get(profile) < .0){
-                    preVL.set(profile, .0);
-                }
+                noFlag(profile);
                 return;
             }
             long jumpTicks = profile.getJumpTicks();
@@ -64,17 +58,11 @@ public class JumpA extends Check {
                             flag(infoMap, profile, e, MoveEvent.CancelType.get((String) getSettings().getSetting("cancel-type")));
                         }
                     }
-                }else if(preVL.get(profile) != .0){
-                    preVL.decay(profile);
-                    if(preVL.get(profile) < .0){
-                        preVL.set(profile, .0);
-                    }
+                }else{
+                    noFlag(profile);
                 }
-            }else if(preVL.get(profile) != .0){
-                preVL.decay(profile);
-                if(preVL.get(profile) < .0){
-                    preVL.set(profile, .0);
-                }
+            }else{
+                noFlag(profile);
             }
         }
     }

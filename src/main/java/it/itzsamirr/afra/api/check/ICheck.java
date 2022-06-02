@@ -20,6 +20,7 @@ public interface ICheck extends Listener {
     boolean isEnabled();
     boolean isExperimental();
     boolean isDev();
+    void noFlag(IProfile profile);
     void flag(HashMap<String, Object> infoMap, IProfile profile, Cancellable cancellable, int type);
     String generateFormattedInfo(HashMap<String, Object> infoMap);
     default boolean canBypass(IProfile profile) {

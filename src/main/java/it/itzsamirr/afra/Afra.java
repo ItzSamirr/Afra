@@ -6,7 +6,7 @@ import it.itzsamirr.afra.api.check.ICheckManager;
 import it.itzsamirr.afra.api.event.IEventManager;
 import it.itzsamirr.afra.api.profile.IProfileManager;
 import it.itzsamirr.afra.check.CheckManager;
-import it.itzsamirr.afra.api.event.EventManager;
+import it.itzsamirr.afra.event.EventManager;
 import it.itzsamirr.afra.listeners.MoveListener;
 import it.itzsamirr.afra.listeners.ProfileListener;
 import it.itzsamirr.afra.profile.Profile;
