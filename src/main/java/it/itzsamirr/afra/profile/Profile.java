@@ -1,10 +1,12 @@
 package it.itzsamirr.afra.profile;
 
+import it.itzsamirr.afra.api.check.ICheck;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.api.profile.flag.IFlagController;
 import it.itzsamirr.afra.api.utils.Color;
 import it.itzsamirr.afra.api.utils.Reflection;
 import it.itzsamirr.afra.profile.flag.JumpFlagController;
+import it.itzsamirr.afra.profile.flag.NoFallFlagController;
 import it.itzsamirr.afra.profile.flag.SpeedFlagController;
 import it.itzsamirr.afra.utils.Distance;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -16,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,17 +29,23 @@ public final class Profile implements IProfile {
     private final double PLAYER_WIDTH = .6;
     private final double PLAYER_HEIGHT = 1.8;
     private final double PLAYER_HEIGHT_SNEAKING = 1.6;
-    private boolean lastOnGround = false;
+    private double lastAcceleration;
+    private boolean lastOnGround, lastNearGround;
+    private final HashMap<ICheck, Long> lastFlagTime = new HashMap<>();
     private long groundTicks = 0, lastGroundTicks = 0, jumpTicks = 0, lastJumpTicks = 0;
     private Location lastGroundLocation;
     private final List<IFlagController> flagControllers = new ArrayList<>();
 
     public Profile(Player player) {
         this.player = player;
+        lastOnGround = isOnGround();
+        lastNearGround = isNearGround();
+        this.lastAcceleration = 0d;
         lastGroundLocation = null;
         lastDistance = new Distance(player.getLocation(), player.getLocation());
         flagControllers.add(new JumpFlagController(this));
         flagControllers.add(new SpeedFlagController(this));
+        flagControllers.add(new NoFallFlagController(this));
     }
 
     @Override
@@ -152,10 +161,66 @@ public final class Profile implements IProfile {
         double ex = 0.3d;
         for(double x = -ex;x<=ex;x+=ex){
             for(double z = -ex;z<=ex;z+=ex){
-                if(location.clone().add(x, -0.5001, z).getBlock().getType().isSolid()) return true;
+                if(location.clone().add(x, -0.01, z).getBlock().getType() != Material.AIR) return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean isInLiquid() {
+        Location loc = getLocation();
+        return loc.getBlock().getLocation().clone().add(0, -1, 0).getBlock().getType() == Material.WATER
+                || loc.getBlock().getLocation().clone().add(0, -1, 0).getBlock().getType() == Material.LAVA
+                || loc.getBlock().getLocation().clone().add(0, -1, 0).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.getBlock().getLocation().clone().add(0, -1, 0).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().add(PLAYER_WIDTH/2, -1,0).getBlock().getType() == Material.WATER
+                || loc.clone().add(PLAYER_WIDTH/2, -1,0).getBlock().getType() == Material.LAVA
+                || loc.clone().add(PLAYER_WIDTH/2, -1,0).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().add(PLAYER_WIDTH/2, -1,0).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().add(PLAYER_WIDTH/2, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.WATER
+                || loc.clone().add(PLAYER_WIDTH/2, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.LAVA
+                || loc.clone().add(PLAYER_WIDTH/2, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().add(PLAYER_WIDTH/2, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().add(PLAYER_WIDTH/2, -1, -PLAYER_WIDTH/2).getBlock().getType() == Material.WATER
+                || loc.clone().add(PLAYER_WIDTH/2, -1, -PLAYER_WIDTH/2).getBlock().getType() == Material.LAVA
+                || loc.clone().add(PLAYER_WIDTH/2, -1, -PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().add(PLAYER_WIDTH/2, -1, -PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().add(-PLAYER_WIDTH/2, -1, 0).getBlock().getType() == Material.WATER
+                || loc.clone().add(-PLAYER_WIDTH/2, -1, 0).getBlock().getType() == Material.LAVA
+                || loc.clone().add(-PLAYER_WIDTH/2, -1, 0).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().add(-PLAYER_WIDTH/2, -1, 0).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().add(-PLAYER_WIDTH/2, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.WATER
+                || loc.clone().add(-PLAYER_WIDTH/2, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.LAVA
+                || loc.clone().add(-PLAYER_WIDTH/2, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().add(-PLAYER_WIDTH/2, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().add(0, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.WATER
+                || loc.clone().add(0, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.LAVA
+                || loc.clone().add(0, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().add(0, -1,-PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().add(0, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.WATER
+                || loc.clone().add(0, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.LAVA
+                || loc.clone().add(0, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().add(0, -1, PLAYER_WIDTH/2).getBlock().getType() == Material.STATIONARY_LAVA
+                || loc.clone().getBlock().getType() == Material.WATER
+                || loc.clone().getBlock().getType() == Material.LAVA
+                || loc.clone().getBlock().getType() == Material.STATIONARY_WATER
+                || loc.clone().getBlock().getType() == Material.STATIONARY_LAVA;
+    }
+
+    @Override
+    public double getLastAcceleration() {
+        return lastAcceleration;
+    }
+
+    @Override
+    public void setLastAcceleration(double acc) {
+        this.lastAcceleration = acc;
+    }
+
+    @Override
+    public boolean isLastNearGround() {
+        return lastNearGround;
     }
 
     @Override
@@ -167,7 +232,8 @@ public final class Profile implements IProfile {
                 || loc.clone().add(-PLAYER_WIDTH/2, -1, 0).getBlock().getType().isSolid()
                 || loc.clone().add(-PLAYER_WIDTH/2, -1,-PLAYER_WIDTH/2).getBlock().getType().isSolid()
                 || loc.clone().add(0, -1,-PLAYER_WIDTH/2).getBlock().getType().isSolid()
-                || loc.clone().add(0, -1, PLAYER_WIDTH/2).getBlock().getType().isSolid();
+                || loc.clone().add(0, -1, PLAYER_WIDTH/2).getBlock().getType().isSolid()
+                || loc.clone().getBlock().getType().isSolid();
     }
 
     @Override
@@ -178,6 +244,11 @@ public final class Profile implements IProfile {
     @Override
     public void setLastOnGround(boolean onGround) {
         this.lastOnGround = onGround;
+    }
+
+    @Override
+    public void setLastNearGround(boolean nearGround) {
+        this.lastNearGround = nearGround;
     }
 
     @Override

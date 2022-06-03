@@ -57,12 +57,14 @@ public class JumpA extends Check {
                             infoMap.put("max", Values.MAX_JUMP_TICKS_IN_AIR+profile.getYJumpModifier());
                             flag(infoMap, profile, e, MoveEvent.CancelType.get((String) getSettings().getSetting("cancel-type")));
                         }
+                    }else{
+                        if(profile.isOnGround()) noFlag(profile);
                     }
                 }else{
-                    noFlag(profile);
+                    if(profile.isOnGround()) noFlag(profile);
                 }
             }else{
-                noFlag(profile);
+                if(profile.isOnGround()) noFlag(profile);
             }
         }
     }

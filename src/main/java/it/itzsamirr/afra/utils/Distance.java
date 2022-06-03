@@ -23,6 +23,10 @@ public final class Distance {
         this(from.getX(), from.getY(), from.getZ(), to.getX(), to.getY(), to.getZ(), from.getYaw(), to.getYaw(), from.getPitch(), to.getPitch());
     }
 
+    public double getAcceleration(Distance last){
+        return Math.abs(getDXZ() - last.getDXZ());
+    }
+
     public float getDYaw(){
         return yawTo - yawFrom;
     }

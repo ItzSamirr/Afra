@@ -8,6 +8,7 @@ import it.itzsamirr.afra.api.check.annotations.Testing;
 import it.itzsamirr.afra.check.movement.jump.JumpA;
 import it.itzsamirr.afra.check.movement.nofall.NoFallA;
 import it.itzsamirr.afra.check.movement.speed.SpeedA;
+import it.itzsamirr.afra.check.movement.speed.SpeedB;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public final class CheckManager implements ICheckManager {
     public CheckManager(Afra plugin)
     {
         this.plugin = plugin;
-        register(new JumpA(plugin), new SpeedA(plugin), new NoFallA(plugin));
+        register(new JumpA(plugin), new SpeedA(plugin), new SpeedB(plugin), new NoFallA(plugin));
     }
 
     @Override

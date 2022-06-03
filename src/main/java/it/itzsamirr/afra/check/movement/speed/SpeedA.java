@@ -3,6 +3,7 @@ package it.itzsamirr.afra.check.movement.speed;
 import it.itzsamirr.afra.Afra;
 import it.itzsamirr.afra.api.check.CheckCategory;
 import it.itzsamirr.afra.api.check.annotations.Experimental;
+import it.itzsamirr.afra.api.check.annotations.Testing;
 import it.itzsamirr.afra.api.event.Event;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.check.Check;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Experimental(dev = true)
+@Testing
 public class SpeedA extends Check {
     public SpeedA(Afra plugin) {
         super(plugin, CheckCategory.MOVEMENT, "Speed", 'A', "Checks if the player is not following the friction rules in air");
@@ -33,7 +35,6 @@ public class SpeedA extends Check {
     public void on(Event event) {
         MoveEvent e = (MoveEvent) event;
         if(!isEnabled()) {
-            noFlag(e.getProfile());
             return;
         }
         if(canBypass(e.getProfile())){
@@ -49,7 +50,7 @@ public class SpeedA extends Check {
             noFlag(profile);
             return;
         }
-        if(!profile.isNearGround() && !profile.isLastOnGround()) {
+        if((!profile.isNearGround() && !profile.isLastNearGround()) || (!profile.isOnGround() && !profile.isLastOnGround())) {
             final double lastdxz = profile.getLastDistance().getDXZ();
             final double dxz = d.getDXZ();
             final double appliedLastDxz = lastdxz * Values.FRICTION;

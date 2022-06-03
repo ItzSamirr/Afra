@@ -76,8 +76,11 @@ public class MoveListener implements Listener {
                 profile.setJumpTicks(0);
                 break;
         }
-        profile.setLastDistance(new Distance(e.getFrom(), e.getTo()));
+        Distance nowDistance = new Distance(e.getFrom(), e.getTo());
+        profile.setLastAcceleration(nowDistance.getAcceleration(profile.getLastDistance()));
+        profile.setLastDistance(nowDistance);
         profile.setLastOnGround(profile.isOnGround());
+        profile.setLastNearGround(profile.isNearGround());
         profile.setLastGroundTicks(profile.getGroundTicks());
         profile.setLastJumpTicks(profile.getJumpTicks());
     }

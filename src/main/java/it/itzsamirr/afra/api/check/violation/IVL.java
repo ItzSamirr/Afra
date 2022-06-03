@@ -6,6 +6,7 @@ import it.itzsamirr.afra.api.profile.IProfile;
 public interface IVL {
     void accumulate(IProfile profile);
     void decay(IProfile profile);
+    void remove(IProfile profile);
     void set(IProfile profile, int amount);
     int get(IProfile profile);
     void reset(IProfile profile);

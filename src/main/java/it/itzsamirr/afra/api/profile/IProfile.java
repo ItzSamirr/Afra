@@ -34,9 +34,14 @@ public interface IProfile {
     Player.Spigot spigot();
     int getPing();
     boolean isNearGround();
+    boolean isInLiquid();
+    double getLastAcceleration();
+    void setLastAcceleration(double acc);
+    boolean isLastNearGround();
     boolean isOnGround();
     boolean isLastOnGround();
     void setLastOnGround(boolean onGround);
+    void setLastNearGround(boolean nearGround);
     long getGroundTicks();
     long getLastGroundTicks();
     long getJumpTicks();

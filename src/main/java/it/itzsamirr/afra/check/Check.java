@@ -123,7 +123,7 @@ public abstract class Check implements ICheck {
             }
             if(plugin.getConfig().getBoolean("flag.msg.click.enabled"))
             {
-                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/" + plugin.getConfig().getString("flag.msg.click.command")));
+                component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/" + plugin.getConfig().getString("flag.msg.click.command").replace("{player}", profile.getPlayer().getName())));
             }
             Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("afra.alerts")).forEach(player -> {
                 player.spigot().sendMessage(component);
@@ -140,13 +140,6 @@ public abstract class Check implements ICheck {
     public void noFlag(IProfile profile) {
         if(preVL.get(profile) != .0) {
             preVL.decay(profile);
-        }else{
-            if(vl.get(profile) != 0){
-                vl.decay(profile);
-            }
-            if(vl.get(profile) < 0){
-                vl.reset();
-            }
         }
         if(preVL.get(profile) < .0){
             preVL.set(profile, .0);

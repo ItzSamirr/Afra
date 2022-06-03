@@ -46,6 +46,11 @@ public final class PreVL implements IPreVL {
     }
 
     @Override
+    public void remove(IProfile profile) {
+        preVl.remove(profile);
+    }
+
+    @Override
     public ICheck getParent() {
         return parent;
     }

@@ -30,6 +30,11 @@ public class VL implements IVL {
     }
 
     @Override
+    public void remove(IProfile profile) {
+        map.remove(profile);
+    }
+
+    @Override
     public void set(IProfile profile, int amount) {
         map.replace(profile, amount);
     }

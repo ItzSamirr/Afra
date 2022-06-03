@@ -1,8 +1,10 @@
 package it.itzsamirr.afra.listeners;
 
 import it.itzsamirr.afra.Afra;
+import it.itzsamirr.afra.api.check.ICheck;
 import it.itzsamirr.afra.api.event.profile.JoinEvent;
 import it.itzsamirr.afra.api.event.profile.QuitEvent;
+import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.profile.Profile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,7 +31,12 @@ public class ProfileListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e){
         Player p = e.getPlayer();
-        QuitEvent quitEvent = new QuitEvent(plugin.getProfileManager().getProfile(p));
+        IProfile profile = plugin.getProfileManager().getProfile(p);
+        plugin.getCheckManager().getChecks(ICheck::isEnabled).forEach(check -> {
+            check.getVL().remove(profile);
+            check.getPreVL().remove(profile);
+        });
+        QuitEvent quitEvent = new QuitEvent(profile);
         plugin.getEventManager().call(quitEvent);
         plugin.getProfileManager().removeProfile(p);
     }

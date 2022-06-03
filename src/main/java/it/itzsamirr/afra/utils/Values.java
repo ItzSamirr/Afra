@@ -16,7 +16,7 @@ public final class Values {
     static{
         MAX_JUMP_TICKS_IN_AIR = 6;
         FRICTION = 0.91f;
-        steppableMaterials = new ArrayList<>(Arrays.asList("STAIRS", "STEP"));
+        steppableMaterials = new ArrayList<>(Arrays.asList("STAIRS", "LADDER", "STEP"));
     }
 
     public static boolean isSteppable(Material mat){

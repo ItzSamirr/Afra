@@ -6,6 +6,7 @@ import it.itzsamirr.afra.api.check.ICheckManager;
 import it.itzsamirr.afra.api.event.IEventManager;
 import it.itzsamirr.afra.api.profile.IProfileManager;
 import it.itzsamirr.afra.check.CheckManager;
+import it.itzsamirr.afra.check.tasks.VlResetTask;
 import it.itzsamirr.afra.event.EventManager;
 import it.itzsamirr.afra.listeners.MoveListener;
 import it.itzsamirr.afra.listeners.ProfileListener;
@@ -29,6 +30,7 @@ public final class Afra extends JavaPlugin implements AfraAPI {
         this.checkManager = new CheckManager(this);
         Bukkit.getOnlinePlayers().stream().filter(player -> profileManager.getProfile(player) == null).forEach(player -> profileManager.addProfile(new Profile(player)));
         AfraProvider.setApi(this);
+        new VlResetTask(this);
     }
 
     private void loadListeners(){
@@ -39,7 +41,7 @@ public final class Afra extends JavaPlugin implements AfraAPI {
 
     @Override
     public void onDisable() {
-
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
     @Override

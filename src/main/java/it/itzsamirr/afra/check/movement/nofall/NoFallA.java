@@ -8,6 +8,7 @@ import it.itzsamirr.afra.api.event.Event;
 import it.itzsamirr.afra.api.event.profile.MoveEvent;
 import it.itzsamirr.afra.api.profile.IProfile;
 import it.itzsamirr.afra.check.Check;
+import it.itzsamirr.afra.profile.flag.NoFallFlagController;
 import it.itzsamirr.afra.utils.Distance;
 import org.bukkit.Location;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Experimental(dev = true)
 public class NoFallA extends Check {
+    private int accumulator = 0;
     public NoFallA(Afra plugin) {
         super(plugin, CheckCategory.MOVEMENT, "NoFall", 'A', "Checks if the player is spoofing the client ground");
     }
@@ -36,6 +38,10 @@ public class NoFallA extends Check {
         Location to = e.getTo();
         Distance d = new Distance(from, to);
         IProfile profile = e.getProfile();
+        if(profile.getFlagController(NoFallFlagController.class).shouldNotFlag()){
+            noFlag(profile);
+            return;
+        }
         boolean onGroundServer = profile.isOnGround();
         boolean lastOnGroundServer = profile.isLastOnGround();
         boolean onGroundClient = profile.getPlayer().isOnGround();
@@ -47,6 +53,9 @@ public class NoFallA extends Check {
             infoMap.put("lastOnGroundServer", onGroundServer);
             flag(infoMap, profile, e, 0);
         }else{
+            accumulator += 1;
+        }
+        if(accumulator >= 2000){
             noFlag(profile);
         }
     }

@@ -1,5 +1,10 @@
 prefix: "&b[&3&lAfra&b] &r"
 bypass: true
+vl-reset-delay: 1200
+notify-vl-reset:
+  enabled: true
+  msg:
+    - "{prefix}&bAll violations have been reset!"
 experimental: "&cExperimental&r"
 dev: "&4Dev&r"
 flag:
@@ -26,8 +31,8 @@ checks:
       a:
         bypass: true
         enabled: true
-        cancel-type: "SETBACK"
-        punishable: true
+        cancel-type: "NOTHING"
+        punishable: false
         kick-reason: "[Afra] Cheating\n Speed [A]"
         vl:
           max: 15
@@ -36,7 +41,21 @@ checks:
         buffer:
           decay: 1.0
           accumulator: 1.0
-          max: 2.0
+          max: 1.0
+      b:
+        bypass: true
+        enabled: true
+        cancel-type: "NOTHING"
+        punishable: false
+        kick-reason: "[Afra] Cheating\n Speed [B]"
+        vl:
+          max: 15
+          accumulator: 1
+          decay: 1
+        buffer:
+          decay: 1.0
+          accumulator: 1.0
+          max: 5.0
     nofall:
       a:
         bypass: true
